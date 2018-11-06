@@ -1,5 +1,6 @@
 require 'sqlite3'
 require 'singleton'
+require_relative 'questions_database'
 
 class UserDatabase < SQLite3::Database
   include Singleton
@@ -37,6 +38,10 @@ class User
     @lname = options['lname']
   end
 
+  def authored_replies
+    Reply.find_by_user_id(self.id)
+  end
+
   def create
     UserDatabase.instance.execute(<<-SQL, self.fname, self.lname)
       INSERT INTO
@@ -57,5 +62,9 @@ class User
       WHERE
         id = ?
     SQL
+  end
+
+  def authored_questions
+    Question.find_by_author_id(self.id)
   end
 end

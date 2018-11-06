@@ -1,5 +1,6 @@
 require 'sqlite3'
 require 'singleton'
+require_relative 'user'
 
 class QuestionsDatabase < SQLite3::Database
   include Singleton
@@ -31,6 +32,21 @@ class Question
     Question.new(data.first)
   end
 
+  def self.find_by_author_id(author_id)
+    data = QuestionsDatabase.instance.execute(<<-SQL, author_id)
+      SELECT
+        *
+      FROM
+        questions
+      WHERE
+        author_id = ?
+    SQL
+
+    data.map do |datum|
+      Question.new(datum)
+    end
+  end
+
 
   attr_accessor :id, :title, :body, :author_id
 
@@ -39,6 +55,18 @@ class Question
     @title = options['title']
     @body = options['body']
     @author_id = options['author_id']
+  end
+
+  def author
+    result = UserDatabase.instance.execute(<<-SQL, self.author_id)
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        id = ?
+    SQL
+    result.first['fname']
   end
 
   def create
