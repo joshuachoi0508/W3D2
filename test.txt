@@ -1,0 +1,1 @@
+question = Question.new('title' => 'TEST', 'body' => 'TEST', 'author_id' => 1)
