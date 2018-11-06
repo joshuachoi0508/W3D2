@@ -1,1 +1,4 @@
-question = Question.new('title' => 'TEST', 'body' => 'TEST', 'author_id' => 1)
+question = Question.new('title' => 'TEST2', 'body' => 'TEST2', 'author_id' => 1, 'id' => 9)
+
+
+User.new('fname'=> 'Ronil', 'lname' => 'The guy')
