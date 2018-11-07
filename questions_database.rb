@@ -1,6 +1,8 @@
 require 'sqlite3'
 require 'singleton'
 require_relative 'user'
+require_relative 'reply'
+require_relative 'questionfollow'
 
 class QuestionsDatabase < SQLite3::Database
   include Singleton
@@ -57,6 +59,10 @@ class Question
     @author_id = options['author_id']
   end
 
+  def replies
+    Reply.find_by_question_id(self.id)
+  end
+
   def author
     result = UserDatabase.instance.execute(<<-SQL, self.author_id)
       SELECT
@@ -67,6 +73,10 @@ class Question
         id = ?
     SQL
     result.first['fname']
+  end
+
+  def followers
+    QuestionFollow.followers_for_question_id(self.id)
   end
 
   def create
@@ -90,5 +100,9 @@ class Question
       WHERE
        id = ?
     SQL
+  end
+
+  def self.most_followed(n)
+    QuestionFollow.most_followed_questions(n)
   end
 end

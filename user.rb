@@ -1,14 +1,9 @@
-require 'sqlite3'
-require 'singleton'
-require_relative 'questions_database'
 
-class UserDatabase < SQLite3::Database
-  include Singleton
-  def initialize
-    super('questions.db')
-    self.type_translation = true
-    self.results_as_hash = true
-  end
+require_relative 'questions_database'
+require_relative 'reply'
+require_relative 'modeldatabase'
+
+class UserDatabase < ModelDataBase
 end
 
 class User
@@ -67,4 +62,10 @@ class User
   def authored_questions
     Question.find_by_author_id(self.id)
   end
+
+  def followed_questions
+    QuestionFollow.followed_questions_for_user_id(self.id)
+  end
+
+  
 end

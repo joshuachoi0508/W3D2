@@ -45,7 +45,11 @@ INSERT INTO
 VALUES
   (1, 1),
   (2, 2),
-  (1, 3);
+  (1, 3),
+  (3, 1),
+  (4, 1),
+  (5, 1),
+  (5, 2);
 
 CREATE TABLE replies(
   id INTEGER PRIMARY KEY,
